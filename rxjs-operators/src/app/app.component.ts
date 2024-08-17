@@ -152,12 +152,23 @@ export class AppComponent implements OnInit {
       });
     });
     //////////////////////////// with concatMap //////////////////
+    let myProperties: String = '';
     this.getProperty('deep')
       .pipe(
         concatMap((result: string) => this.getProperty(result + ' blue')),
+        tap((result: string) => {
+          myProperties = result;
+        }),
         concatMap((result: string) => this.getProperty(result + ' ocean'))
       )
-      .subscribe((result) => console.log('with concatMap:', result));
+      .subscribe((result) =>
+        console.log(
+          'with concatMap:',
+          result,
+          'mySecondProperty::',
+          myProperties
+        )
+      );
   }
 
   getProperty(deepness: string): Observable<string> {
